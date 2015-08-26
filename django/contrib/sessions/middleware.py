@@ -13,7 +13,9 @@ class SessionMiddleware(object):
 
     def process_request(self, request):
         session_key = request.COOKIES.get(settings.SESSION_COOKIE_NAME, None)
+        print('SESSION_KEY', session_key)
         request.session = self.SessionStore(session_key)
+        print('SESSION_DATA', vars(request.session), request.session.items())
 
     def process_response(self, request, response):
         """

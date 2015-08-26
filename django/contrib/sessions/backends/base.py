@@ -96,10 +96,12 @@ class SessionBase(object):
             hash, serialized = encoded_data.split(b':', 1)
             expected_hash = self._hash(serialized)
             if not constant_time_compare(hash.decode(), expected_hash):
+                print('SUSPICIOUS SESSION')
                 raise SuspiciousSession("Session data corrupted")
             else:
                 return self.serializer().loads(serialized)
         except Exception as e:
+            print('DECODE ERROR', e)
             # ValueError, SuspiciousOperation, unpickling exceptions. If any of
             # these happen, just return an empty dictionary (an empty session).
             if isinstance(e, SuspiciousOperation):

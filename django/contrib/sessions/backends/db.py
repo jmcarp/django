@@ -20,8 +20,10 @@ class SessionStore(SessionBase):
                 session_key=self.session_key,
                 expire_date__gt=timezone.now()
             )
+            print('SESSION', s, s.session_data)
             return self.decode(s.session_data)
         except (Session.DoesNotExist, SuspiciousOperation) as e:
+            print('ERROR', e)
             if isinstance(e, SuspiciousOperation):
                 logger = logging.getLogger('django.security.%s' %
                         e.__class__.__name__)

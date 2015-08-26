@@ -63,6 +63,7 @@ def permission_required(perm, login_url=None, raise_exception=False):
             perms = (perm, )
         else:
             perms = perm
+        print('USER', user, user.is_authenticated(), user.has_perms(perms))
         # First check if the user has the permission (even anon users)
         if user.has_perms(perms):
             return True

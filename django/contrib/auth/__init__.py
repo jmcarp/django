@@ -166,12 +166,14 @@ def get_user(request):
     try:
         user_id = _get_user_session_key(request)
         backend_path = request.session[BACKEND_SESSION_KEY]
-    except KeyError:
-        pass
+    except KeyError as error:
+        print('ERROR', error)
     else:
         if backend_path in settings.AUTHENTICATION_BACKENDS:
             backend = load_backend(backend_path)
+            print('BACKEND', backend)
             user = backend.get_user(user_id)
+            print('BACKEND USER', 'user')
             # Verify the session
             if ('django.contrib.auth.middleware.SessionAuthenticationMiddleware'
                     in settings.MIDDLEWARE_CLASSES and hasattr(user, 'get_session_auth_hash')):
@@ -180,6 +182,7 @@ def get_user(request):
                     session_hash,
                     user.get_session_auth_hash()
                 )
+                print('VERIFIED', session_hash_verified)
                 if not session_hash_verified:
                     request.session.flush()
                     user = None
